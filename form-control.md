@@ -1,45 +1,94 @@
 * High Level Architecture
+
   * Module \(NgModules\)
+
     * Bundle native application & extend the application
 
     * Lazy loading the modules
 
       * Each modules can be loaded into Angular as long as the route touch
 
+    * ```typescript
+      // Eager import
+      import { ModuleWithProviders } from '@angular/core';
+      import { Routes, RouterModule } from '@angular/router';
+      import { moduleA, routeArrA } from './moduleA';
+      import { moduleB, routeArrB } from './moduleB';
+
+      const normalRoutes: Routes = [
+        { path: '', redirectTo: 'A', pathMatch: 'full' },
+        { path: 'A', children: routeArrA }, 
+        { path: 'B', children: routeArrB }
+      ];
+
+      const routing: ModuleWithProviders = RouterModule.forRoot(routes);
+
+      @NgModules{
+          imports: [
+              moduleA,
+              moduleB,
+              normalRoutes
+          ]
+      }
+
+      // Lazy Load
+      const lazyRoutes: Routes = [
+        { path: '', redirectTo: 'eager', pathMatch: 'full' },
+        // loadChildren: 'pathToModule#className'
+        { path: 'A', loadChildren: 'moduleA#moduleA' },
+        { path: 'B', loadChildren: 'moduleB#moduleB' }
+      ];
+
+      @NgModules{
+          imports: [
+              lazyRoutes
+          ]
+      }
+      ```
+
+      forRoot and forChild
+
+      * These functions are used for shared modules with providers in both eager and lazy module. These define what providers should be exported.
+
+      * forRoot registers the providers globally
+
+      * forChild registers the providers locally. It can override the global provider.
+
       * ```typescript
-        // Normal import
-        import { ModuleWithProviders } from '@angular/core';
-        import { Routes, RouterModule } from '@angular/router';
-        import { moduleA, routeA } from './moduleA';
-        import { moduleB, routeB } from './moduleB';
-
-        const routes: Routes = [
-          { path: '', redirectTo: 'A', pathMatch: 'full' },
-          // Assume set the route.forChild in moduleA and moduleB
-          // This ways
-          { path: 'A', children: routeA }, 
-          { path: 'B', children: routeB }
-        ];
-
-        const routing: ModuleWithProviders = RouterModule.forRoot(routes);
-
-        @NgModules{
-            imports: [
-                moduleA,
-                moduleB,
-                routing
-            ]
+        // With forChild and forRoot
+        @NgModule({
+            providers: [AService]
+        })
+        export class A {
+            forRoot() {
+                return {
+                    ngModule: A,
+                    providers: [AService]
+                }
+            }
+            forChild() {
+                return {
+                    ngModule: A,
+                    providers: [BService]
+                }
+            }
         }
+        // Without forChild and forRoot
+        @NgModule({
+            providers: [AService]
+        })
+        class A {}
+        export const moduleWithProvidersForRoot = {
+            ngModule: A,
+            providers: [AService]
+        };
+        export const moduleWithProvidersForChild = {
+            ngModule: A,
+            providers: [BService]
+        };
 
-        // Lazy Load
-        const routes: Routes = [
-          { path: '', redirectTo: 'eager', pathMatch: 'full' },
-          { path: 'eager', component: EagerComponent },
-          { path: 'lazy', loadChildren: 'lazy/lazy.module#LazyModule' }
-        ];
-
-        export routes
         ```
+
 * Data Binding
   * 
 
