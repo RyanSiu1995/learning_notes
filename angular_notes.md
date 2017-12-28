@@ -2,6 +2,18 @@
 
   * Module \(NgModules\)
 
+    * @NgModule decorator
+
+      * declare - components, directives and pipes
+
+      * imports - other NgModules 
+
+      * provide - services
+
+      * bootstrap - root components
+
+      * exports - 
+
     * Bundle native application & extend the application
 
     * Lazy loading the modules
@@ -35,6 +47,8 @@
       const lazyRoutes: Routes = [
         { path: '', redirectTo: 'eager', pathMatch: 'full' },
         // loadChildren: 'pathToModule#className'
+        // No need to import the routeArr and modules separately
+        // It will automatically inject into the AppModule
         { path: 'A', loadChildren: 'moduleA#moduleA' },
         { path: 'B', loadChildren: 'moduleB#moduleB' }
       ];
@@ -86,10 +100,18 @@
             ngModule: A,
             providers: [BService]
         };
-
         ```
 
+        Reference: 
+
+        1. [https://stackoverflow.com/questions/40498081/routermodule-forrootroutes-vs-routermodule-forchildroutes/44680396](https://stackoverflow.com/questions/40498081/routermodule-forrootroutes-vs-routermodule-forchildroutes/44680396)
+
+        2. [https://blog.angularindepth.com/avoiding-common-confusions-with-modules-in-angular-ada070e6891f](https://blog.angularindepth.com/avoiding-common-confusions-with-modules-in-angular-ada070e6891f)
+
+    * 
+
 * Data Binding
+
   * 
 
 

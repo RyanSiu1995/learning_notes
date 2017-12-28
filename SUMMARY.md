@@ -1,5 +1,5 @@
 # Summary
 
 * [Introduction](README.md)
-* Notes
+* [Notes](angular_notes.md)
 
